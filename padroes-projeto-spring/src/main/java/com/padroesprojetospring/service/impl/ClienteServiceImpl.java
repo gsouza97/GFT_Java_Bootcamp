@@ -40,11 +40,15 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public void atualizar(Long id, Cliente cliente) {
-
+        Optional<Cliente> clienteDB = clienteRepository.findById(id);
+        if (clienteDB.isPresent()) {
+            salvarClienteComCep(cliente);
+        }
     }
 
     @Override
     public void deletar(Long id) {
+        clienteRepository.deleteById(id);
 
     }
 
@@ -55,6 +59,8 @@ public class ClienteServiceImpl implements ClienteService {
             enderecoRepository.save(novoEndereco);
             return novoEndereco;
         });
+        cliente.setEndereco(endereco);
+        clienteRepository.save(cliente);
     }
 
 }
